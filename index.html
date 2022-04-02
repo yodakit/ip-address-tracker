@@ -5,12 +5,32 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IP Address Tracker</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
+  <header class="header">
+    <h1 class="title">IP Address Tracker</h1>
+    <form action="#" class="search">
+      <input id="input" type="text" class="search__input" placeholder="Seacrh for any IP address or domain">
+      <button id="button" class="search__btn">
+        <img src="img/icon-arrow.svg" alt="arrow-right" class="search__icon">
+      </button>
+    </form>
+  </header>
+  <section class="info">
+    <div class="info__wrapper">
+      <div class="info__item">
+        <h2 class="info__subtitle">location</h2>
+        <p id="location" class="info__descr">Brooklyn, NY 10001</p>
+      </div>
+      <div class="info__item">
+        <h2 class="info__subtitle">timezone</h2>
+        <p class="info__descr">UTC <span id="timezone">-05:00</span></p>
+      </div>  
+    </div>
+  </section>
+  <div class="map"></div>
   <script src="app.js"></script>
 </body>
 </html>
