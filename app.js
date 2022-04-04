@@ -9,6 +9,9 @@ const formInput = document.getElementById('form'),
 let lat, lng, city, region, postalCode, timezone;
 
 // User geo
+// The user's geolocation is more accurately determined through Yandex Map than through the Geolocation API
+ymaps.ready(initGeo); 
+
 getDataUser();
 
 // IP receive event
@@ -49,10 +52,11 @@ function getDataFromIp(ipAddress) {
 function destrData(data, isUserData) {
   if (isUserData) {
     ({city, region} = data);
-    [lat, lng, postalCode] = [data.latitude, data.longitude, data.postal];
+    postalCode = data.postal;
     timezone = data.utc_offset.slice(0, 3) + ':00';
   } else {
     ({location: {lat, lng, city, region, postalCode, timezone}} = data);
+    ymaps.ready(init);
   }
   renderData();
 }
@@ -63,8 +67,6 @@ function renderData() {
   
   locationElem.innerText = newLocation;
   timezoneElem.innerText = timezone;
-
-  ymaps.ready(init);
 }
 
 // Creating map
@@ -95,5 +97,31 @@ function init() {
   map.controls.remove('typeSelector'); // удаляем тип
   map.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
   map.controls.remove('rulerControl'); // удаляем контрол правил
+}
+
+function initGeo() {
+  let geolocation = ymaps.geolocation,
+    myMap = new ymaps.Map('map', {
+      center: [55, 34],
+      zoom: 10
+    });
+
+  geolocation.get({
+    provider: 'yandex',
+    mapStateAutoApply: true
+  }).then(function (result) {
+    result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+    result.geoObjects.get(0).properties.set({
+      balloonContentBody: 'Мое местоположение'
+    });
+    myMap.geoObjects.add(result.geoObjects);
+  });
+
+  myMap.controls.remove('geolocationControl'); // удаляем геолокацию
+  myMap.controls.remove('searchControl'); // удаляем поиск
+  myMap.controls.remove('trafficControl'); // удаляем контроль трафика
+  myMap.controls.remove('typeSelector'); // удаляем тип
+  myMap.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
+  myMap.controls.remove('rulerControl'); // удаляем контрол правил
 }
 
