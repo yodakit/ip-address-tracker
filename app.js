@@ -1,24 +1,35 @@
 // Variables
+// DOM elem
 const formInput = document.getElementById('form'),
       input = document.getElementById('input'),
       locationElem = document.getElementById('location'),
       timezoneElem = document.getElementById('timezone');
 
-
+// Data
 let lat, lng, city, region, postalCode, timezone;
 
-// Data user
+// User geo
 getDataUser();
 
 // IP receive event
 formInput.addEventListener('submit', (event) => {
   event.preventDefault();
-  const ipAddress = input.value;
+
+  const isIpAddress = validateForm(input.value);
+  if (isIpAddress) {
+    getDataFromIp(input.value);
+  } else {
+    alert('Enter correct IP..');
+  }
   input.value = '';
-  getDataFromIp(ipAddress);
 });
 
 // Function
+// Validate form
+function validateForm(ipAddress) {
+  const regExp = /(\d{1,3}\.){3}\d{1,3}/;
+  return regExp.test(ipAddress);
+}
 
 // Gettting data user
 function getDataUser() {
@@ -28,7 +39,6 @@ function getDataUser() {
 }
 
 // Getting data from ip
-
 function getDataFromIp(ipAddress) {
   fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_PxkTXrm276OiicMW67ucF7GmSPjci&ipAddress=${ipAddress}`)
     .then(res => res.json())
@@ -44,9 +54,7 @@ function destrData(data, isUserData) {
   } else {
     ({location: {lat, lng, city, region, postalCode, timezone}} = data);
   }
-
   renderData();
-  ymaps.ready(init);
 }
 
 // Render data
@@ -55,6 +63,8 @@ function renderData() {
   
   locationElem.innerText = newLocation;
   timezoneElem.innerText = timezone;
+
+  ymaps.ready(init);
 }
 
 // Creating map
