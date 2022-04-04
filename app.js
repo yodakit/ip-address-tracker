@@ -103,7 +103,7 @@ function initGeo() {
   let geolocation = ymaps.geolocation,
     myMap = new ymaps.Map('map', {
       center: [55, 34],
-      zoom: 10
+      zoom: 10,
     });
 
   geolocation.get({
