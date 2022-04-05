@@ -11,8 +11,7 @@ let lat, lng, city, region, postalCode, timezone;
 // User geo
 // The user's geolocation is more accurately determined through Yandex Map than through the Geolocation API
 ymaps.ready(initGeo); 
-
-getDataUser();
+getDataUser().then(renderData);
 
 // IP receive event
 formInput.addEventListener('submit', (event) => {
@@ -20,10 +19,13 @@ formInput.addEventListener('submit', (event) => {
 
   const isIpAddress = validateForm(input.value);
   if (isIpAddress) {
-    getDataFromIp(input.value);
+    getDataFromIp(input.value)
+      .then(renderData)
+      .then(() => ymaps.ready(init));
   } else {
     alert('Enter correct IP..');
   }
+
   input.value = '';
 });
 
@@ -35,17 +37,25 @@ function validateForm(ipAddress) {
 }
 
 // Gettting data user
-function getDataUser() {
-  fetch('https://ipapi.co/json/')
-  .then(res => res.json())
-  .then(data => destrData(data, true));
+async function getDataUser() {
+ try {
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    destrData(data, true);
+  } catch (e) {
+    alert(e);
+  }
 }
 
 // Getting data from ip
-function getDataFromIp(ipAddress) {
-  fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_PxkTXrm276OiicMW67ucF7GmSPjci&ipAddress=${ipAddress}`)
-    .then(res => res.json())
-    .then(data => destrData(data, false));
+async function getDataFromIp(ipAddress) {
+  try {
+    const res = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=at_PxkTXrm276OiicMW67ucF7GmSPjci&ipAddress=${ipAddress}`);
+    const data = await res.json();
+    destrData(data, false);
+  } catch (e) {
+    alert(e);
+  }
 }
 
 // Data destructuring
@@ -56,9 +66,7 @@ function destrData(data, isUserData) {
     timezone = data.utc_offset.slice(0, 3) + ':00';
   } else {
     ({location: {lat, lng, city, region, postalCode, timezone}} = data);
-    ymaps.ready(init);
   }
-  renderData();
 }
 
 // Render data
@@ -85,11 +93,7 @@ function init() {
 
   // Remove previous map
   const prevMap = document.getElementById('map').firstElementChild;
-  const newMap = document.getElementById('map').lastElementChild;
-
-  if (prevMap !== newMap) {
-    prevMap.remove();
-  }
+  prevMap.remove();
 
   map.controls.remove('geolocationControl'); // удаляем геолокацию
   map.controls.remove('searchControl'); // удаляем поиск
