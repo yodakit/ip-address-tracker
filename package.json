@@ -1,0 +1,25 @@
+{
+  "name": "ip-address-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://yodakit.github.io/ip-address-tracker",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yodakit/ip-address-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yodakit/ip-address-tracker/issues"
+  },
+  "homepage": "https://github.com/yodakit/ip-address-tracker#readme",
+  "dependencies": {
+    "gh-pages": "^4.0.0"
+  }
+}
